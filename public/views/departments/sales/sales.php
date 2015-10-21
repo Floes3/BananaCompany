@@ -1,13 +1,8 @@
 <?php
-error_reporting( E_ALL );
-require '../../../../app/init.php';
-require HTTP . 'public/header.php'; ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+require_once '../../../../app/init.php';
+require_once '../../../header.php';
+ ?>
+
 <header>
     <div class="col-md-12">
         <h1>barroc IT</h1>
