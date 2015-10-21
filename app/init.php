@@ -5,10 +5,10 @@ session_start();
 define('SCHEME', 'http');
 
 define('ROOT', __DIR__ . '/../');
-define('PUBLIC_FOLDER', ROOT . 'barrocit.bosch-webdevelopment.nl/');
-define('APP_FOLDER', ROOT . 'app/');
+define('PUBLIC_FOLDER', ROOT . 'public');
+define('APP_FOLDER', ROOT . 'app');
 
-define( 'HTTP', SCHEME . '://barrocit.bosch-webdevelopment.nl/');
+define( 'HTTP', SCHEME . '://localhost/Barroc IT Banana Company/BananaCompany/');
 
 
 require_once __DIR__ . '/config/config.php';

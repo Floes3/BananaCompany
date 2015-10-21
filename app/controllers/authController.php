@@ -5,7 +5,7 @@ switch($_POST['type']){
     case 'login':
 
         if (login($db,$_POST['username'],$_POST['password'],$messageBag)){
-           header('location:' . HTTP . 'index.php');
+           header('location:' . HTTP . 'public/index.php');
         } else {
             
             header('Location: ' . HTTP . 'public/views/auth/login.php');

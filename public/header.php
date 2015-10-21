@@ -12,12 +12,12 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo HTTP . 'public/assets/css/normalize.min.css'?>">
         <link rel="stylesheet" href="<?php echo HTTP . 'public/assets/css/main.css'?>">
-        <link rel="stylesheet" href="<?php echo HTTP . 'public/assets/css/main-david.css'?>">
+        <link rel="stylesheet" href="<?php echo PUBLIC_FOLDER . 'assets/css/main-david.css'?>">
         <link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.min.css"/>
 
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-        <script src="<?php echo HTTP . 'public/assets/js/menu.js' ?>"></script>
-        <script src="<?php echo HTTP . 'public/assets/js/vendor/modernizr-2.8.3.min.js'?>"></script>
+        <script src="<?php echo PUBLIC_FOLDER . 'assets/js/menu.js' ?>"></script>
+        <script src="<?php echo PUBLIC_FOLDER . 'assets/js/vendor/modernizr-2.8.3.min.js'?>"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
    

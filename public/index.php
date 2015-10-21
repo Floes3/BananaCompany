@@ -1,10 +1,10 @@
-
 <?php
-require_once 'header.php';
+
+require_once '../app/init.php';
 
 if ( ! isset($_SESSION['user']) ) {
-    $messageBag->Add('a','U dient ingelogt te zijn!');
-    header('location:' . HTTP . 'public/views/auth/login.php');
+    header('location: public/views/auth/login.php');
+    exit;
 }
 
 $role = $_SESSION['user']['userrole'];
@@ -20,7 +20,9 @@ switch($role) {
         header('location: views/departments/sales/sales.php');
         break;
     case 4:
+        
         header('location: views/departments/admin/admin.php');
         break;
   
 }
+?>
