@@ -61,6 +61,7 @@ textarea {
     text-transform:  uppercase;
     text-shadow: 2px 2px 3px black;
     color: gray;
+    margin-bottom: 20px;
 }
 
 .login-bg{
