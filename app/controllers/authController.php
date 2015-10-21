@@ -5,9 +5,10 @@ switch($_POST['type']){
     case 'login':
 
         if (login($db,$_POST['username'],$_POST['password'],$messageBag)){
-           header('location:' . HTTP . 'public/index.php');
+           header('location:' . HTTP . 'index.php');
         } else {
-            header('Location: ' .HTTP . 'public/views/auth/Login.php');
+            
+            header('Location: ' . HTTP . 'public/views/auth/login.php');
         }
         break;
 
@@ -21,6 +22,7 @@ switch($_POST['type']){
         if(register($db, $_POST['username'],$_POST['password'],$messageBag)){
             header('Location: ' .HTTP . 'public/views/auth/Login.php');
         } else {
+
             header('Location: ' .HTTP . 'public/views/auth/register.php');
         }
         break;
@@ -33,7 +35,7 @@ function login($db, $username, $password,$messageBag){
 
 
     if(empty($username) || empty($password)){
-        $messageBag->Add('a','Een of meerdere verplichte velden zijn niet ingevuld!');
+        $messageBag->Add('a',"One or more fields aren't filled in!");
         return false;
     }
 
@@ -58,6 +60,7 @@ function login($db, $username, $password,$messageBag){
         }
 
     }
+    $messageBag->Add('a','wrong username or password');
     return false;
 }
 
