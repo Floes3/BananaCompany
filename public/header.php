@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . '/../app/init.php'; ?>
-<!-- kleine test -->
+
 <!doctype html>
 <html class="no-js" lang="">
     <head>
