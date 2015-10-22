@@ -14,10 +14,8 @@ require_once '../../../header.php';
         <li><a href='#'>Products</a></li>
         <li><a href='#'>Company</a></li>
         <li><a href='#'>Contact</a></li>
-        <form action="../../../../app/controllers/authController.php" method="POST">
-            <li><input type="submit" value="Logout"></li>
-            <input type="hidden" name="type" value="logout">
-        </form>
+        <li><a href="../../../../app/controllers/authController.php?logout=true" name="type" style='    margin-left: 700px;'>Logout</a></li>
+       
         
     </ul>
 </div>

@@ -1,5 +1,10 @@
 <?php require_once '../init.php';
 
+if (isset($_GET['logout'])) {
+    logout($messageBag);
+    header('Location: ' .HTTP . 'public/views/auth/Login.php');
+}
+
 switch($_POST['type']){
 
     case 'login':
