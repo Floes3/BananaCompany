@@ -14,7 +14,7 @@ require_once '../../../header.php';
         <li><a href='#'>Products</a></li>
         <li><a href='#'>Company</a></li>
         <li><a href='#'>Contact</a></li>
-        <li><a href="../../../../app/controllers/authController.php?logout=true" name="type" style='    margin-left: 700px;'>Logout</a></li>
+        <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
        
         
     </ul>
