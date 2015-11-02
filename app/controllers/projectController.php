@@ -101,7 +101,7 @@ function add($projectName, $customerNR, $description, $db,$messageBag ) {
             $q->bindParam(':description', $description);
             
             $q->execute();
-            $messageBag->Add('a','Project added');
+            $messageBag->Add('s','Project added');
             return true; 
         }
     }

@@ -25,14 +25,16 @@ $results = $q->fetchAll();
 <div id='cssmenu'>
     <ul>
         <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Home</a></li>
-        <li><a href='#'>Projects</a></li>
-        <li><a href='#'>Clients</a></li>
         <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
        
         
     </ul>
 </div>
-
+<?php
+                if($messageBag->hasMsg()){
+                   echo $messageBag->show();
+                }
+            ?>
     
 <div class="container">
     <?php foreach ($results as $result): ?>
@@ -50,7 +52,7 @@ $results = $q->fetchAll();
                             <th>Project name</th>
                             <th>Company</th>
                             <th>Description</th>
-                            <th>Delete</th>
+                          
                         </tr>
                     </thead>
 
@@ -60,17 +62,7 @@ $results = $q->fetchAll();
                                 
                                 <td><?php echo $result['projectName'] ?></td>
                                 <td><?php echo $result['companyName'] ?></td>
-                                <td><?php echo $result['description'] ?></td>
-                                
-                                <td>
-	                                <form action="<?php echo HTTP . 'app/controllers/projectController.php' ?>" method="POST">
-										<input type="hidden" name="type" value="delete">
-										<input type="hidden" name='projectNR' value=<?php echo $result['projectNR'] ?>>
-										<input class="btn btn-primary" type="submit" value='delete'>
-	                                </form>
-                                </td>
-                                
-                                
+                                <td><?php echo $result['description'] ?></td>                          
                             </tr>
                         </tbody>
 
@@ -108,9 +100,5 @@ $results = $q->fetchAll();
               </form>
                   <?php endforeach; ?>
 
-			<?php
-		        if($messageBag->hasMsg()){
-		           echo $messageBag->show();
-		        }
-    		?>
+			
         </div>

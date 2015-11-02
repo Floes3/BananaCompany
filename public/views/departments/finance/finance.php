@@ -1,6 +1,23 @@
 <?php
-require_once '../../../../app/init.php';
+
 require_once '../../../header.php';
+
+if ( !isset($_SESSION['user']) ) {
+    header('location: ../../../views/auth/login.php');
+    exit;
+}
+$sql = "SELECT invoices.description, inDate, companyName 
+		FROM invoices 
+		INNER JOIN projects ON projects.projectNR = invoices.projectNR 
+		INNER JOIN customer ON customer.customerNR = projects.customerNR
+		WHERE invoices.active = 1";
+$q= $db->query($sql);
+$results = $q->fetchAll();
+
+$sql = "SELECT * FROM customer;";
+$q= $db->query($sql);
+$clients = $q->fetchAll();
+
  ?>
 
 <header>
@@ -14,72 +31,70 @@ require_once '../../../header.php';
         <li><a href='#'>Products</a></li>
         <li><a href='#'>Company</a></li>
         <li><a href='#'>Contact</a></li>
+        <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
     </ul>
 </div>
+<?php
+        if($messageBag->hasMsg()){
+           echo $messageBag->show();
+        }
+    ?>
 <div class="container">
     <div class="col-md-10 dash-title">
-        <h1>Dashboard</h1>
+        <h1>Dashboard | Finance</h1>
     </div>
     <div class="table">
         <div class="col-md-6">
+        <div class="tableOut">
             <h2>Invoices</h2>
-            <a href=""><p>view</p></a>
-            <table class="table table-bordered">
+            <table class="table table-hover">
 	            <thead>
 			      <tr>
-			        <th>Firstname</th>
-			        <th>Lastname</th>
-			        <th>Email</th>
+			     	<th>Client</th>
+			        <th>description</th>
+			        <th>date</th>
 			      </tr>
 			    </thead>
-			    <tbody>
+
+			    <?php foreach ($results as $result): ?>
+			    <tbody class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/invoicePage.php?innr=' .  $result['invoiceNR'] ?>'>
 			      <tr>
-			        <td>John</td>
-			        <td>Doe</td>
-			        <td>john@example.com</td>
+			      	<td><?php echo $result['companyName'] ?></td>
+			        <td><?php echo $result['description'] ?></td>
+			        <td><?php echo $result['inDate'] ?></td>
+			       
 			      </tr>
-			      <tr>
-			        <td>Mary</td>
-			        <td>Moe</td>
-			        <td>mary@example.com</td>
-			      </tr>
-			      <tr>
-			        <td>July</td>
-			        <td>Dooley</td>
-			        <td>july@example.com</td>
-			      </tr>
+			      
 			    </tbody>
+			    <?php endforeach; ?>
 			</table>
         </div>
+        </div>
         <div class="col-md-6">
-            <h2>Client information</h2>
-            <a href=""><p>view</p></a>
-            <table class="table table-bordered">
-	            <thead>
-			      <tr>
-			        <th>Firstname</th>
-			        <th>Lastname</th>
-			        <th>Email</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			      <tr>
-			        <td>John</td>
-			        <td>Doe</td>
-			        <td>john@example.com</td>
-			      </tr>
-			      <tr>
-			        <td>Mary</td>
-			        <td>Moe</td>
-			        <td>mary@example.com</td>
-			      </tr>
-			      <tr>
-			        <td>July</td>
-			        <td>Dooley</td>
-			        <td>july@example.com</td>
-			      </tr>
-			    </tbody>
-			</table>
+            <div class="tableOut">
+                <h2>Client info</h2>
+
+                <table class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Address</th>
+                            <th>Contact person</th>
+                        </tr>
+                    </thead>
+                    <?php foreach ($clients as $client): ?>
+                    <tbody> 
+
+                        <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
+                            <td><?php echo $client['companyName'] ?></td>
+                            <td><?php echo $client['address'] ?></td> 
+                            <td><?php echo $client['contactPerson'] ?></td>
+                        </tr>
+                    </tbody>
+                <?php endforeach; ?>
+
+                </table>
+            </div>
         </div>
     </div>
 

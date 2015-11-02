@@ -28,8 +28,6 @@ $clients = $q->fetchAll();
 <div id='cssmenu'>
     <ul>
         <li class='active'><a href='<?php echo HTTP . 'public/views/depatments/development/development.php' ?>'>Home</a></li>
-        <li><a href='#'>Projects</a></li>
-        <li><a href='#'>Clients</a></li>
         <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
        
         
@@ -88,7 +86,8 @@ $clients = $q->fetchAll();
                     </thead>
                     <?php foreach ($clients as $client): ?>
                     <tbody> 
-                        <tr class='clickable-row' data-href='#'>
+
+                        <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
                             <td><?php echo $client['companyName'] ?></td>
                             <td><?php echo $client['address'] ?></td> 
                             <td><?php echo $client['contactPerson'] ?></td>
@@ -129,6 +128,51 @@ $clients = $q->fetchAll();
                         <div class=" col-md-3 form-group ">
                             <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add project'>
                         </div>
+              </form>
+
+              </div>
+              </div>
+
+              
+              <div class="addClient">
+        <div class="col-md-12">
+                <hr>
+              <form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
+                    <input type="hidden" name="type" value="add">
+                    <input type="hidden" name='clientNR' value=<?php echo $result['customerNR'] ?>>
+                    <div class="row">
+                        <div class=" col-md-3 form-group">
+                            <label for="clientName">Client name</label>
+                            <input class="form-control" type="text" name='clientName' >
+                        </div>
+                        <div class=" col-md-3 form-group">
+                            <label for="address">Address</label>
+                            <input class="form-control" type="text" name='address'>
+                        </div>
+                        <div class=" col-md-3 form-group">
+                            <label for="zipcode">Zipcode</label>
+                            <input class="form-control" type="text" name='zipcode' >
+                        </div>
+                        <div class=" col-md-3 form-group">
+                            <label for="place">Place</label>
+                            <input class="form-control" type="text" name='place' > 
+                        </div>
+                         <div class=" col-md-3 form-group">
+                            <label for="tel">Tel Number</label>
+                            <input class="form-control" type="text" name='tel' > 
+                        </div>
+                         <div class=" col-md-3 form-group">
+                            <label for="email">email</label>
+                            <input class="form-control" type="text" name='email' > 
+                        </div>
+                         <div class=" col-md-3 form-group">
+                            <label for="contP">Contact person</label>
+                            <input class="form-control" type="text" name='contP'> 
+                        </div>
+                        <div class=" col-md-3 form-group ">
+                            <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add Client'>
+                        </div>
+                    </div>
               </form>
         </div>
     </div>
