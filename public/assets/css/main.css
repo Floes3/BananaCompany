@@ -148,8 +148,10 @@ header{
     margin: 0 auto;
 }
 
-.tableOut{
-    border: 1px solid black;
+.seperator{
+
+    clear: both;
+    border-top: 1px solid grey;
     padding: 10px;
 }
 

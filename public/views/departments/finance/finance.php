@@ -6,6 +6,11 @@ if ( !isset($_SESSION['user']) ) {
     header('location: ../../../views/auth/login.php');
     exit;
 }
+
+ if (!($_SESSION['user']['userrole'] == 1) && !($_SESSION['user']['userrole'] == 4) ) {
+        header('location:' . HTTP . 'public/index.php');
+    }
+
 $sql = "SELECT invoices.description, inDate, companyName 
 		FROM invoices 
 		INNER JOIN projects ON projects.projectNR = invoices.projectNR 
@@ -27,11 +32,19 @@ $clients = $q->fetchAll();
 </header>
 <div id='cssmenu'>
     <ul>
+        <?php if ($_SESSION['user']['userrole'] == 4): ?>
+            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/admin/admin.php' ?>'>Home</a></li>
+            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/sales/sales.php' ?>'>Sales</a></li>
+            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/finance/finance.php' ?>'>Finance</a></li>
+            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
+            <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
+         <?php else: ?>
         <li class='active'><a href='#'>Home</a></li>
         <li><a href='#'>Products</a></li>
         <li><a href='#'>Company</a></li>
         <li><a href='#'>Contact</a></li>
         <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
+    <?php  endif; ?>
     </ul>
 </div>
 <?php
@@ -57,7 +70,7 @@ $clients = $q->fetchAll();
 			    </thead>
 
 			    <?php foreach ($results as $result): ?>
-			    <tbody class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/invoicePage.php?innr=' .  $result['invoiceNR'] ?>'>
+			    <tbody class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/invoicePage.php?innr=' .  $result["invoiceNR"] ?>'>
 			      <tr>
 			      	<td><?php echo $result['companyName'] ?></td>
 			        <td><?php echo $result['description'] ?></td>

@@ -13,7 +13,7 @@ switch($_POST['type']){
     case 'edit':
 
         $id = $_POST['clientNR'];
-        if (edit($_POST["clientName"], $_POST["address"], $_POST["zipcode"], $_POST["place"], $_POST["tel"], $_POST["email"], $_POST["contP"], $db, $id, $messageBag )) {
+        if (edit($_POST["clientName"], $_POST["address"], $_POST["zipcode"], $_POST["place"], $_POST["tel"], $_POST["email"], $_POST["contP"], $_POST["active"], $db, $id, $messageBag )) {
         	header('location:' . HTTP . 'public/views/departments/development/clientPage.php?clientnr=' . $id );
         } else {
         	header('location:' . HTTP . 'public/views/departments/development/clientPage.php?clientnr=' . $id);
@@ -39,7 +39,7 @@ function remove($db, $id, $messageBag){
 }
 
 
-function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db, $id,$messageBag ) {
+function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $active, $db, $id,$messageBag ) {
     $sql = 'SELECT * FROM customer where customerNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
@@ -50,9 +50,9 @@ function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db
 
     if ($q->rowCount() > 0) {
 
-        
+
     	$sql = 'UPDATE customer 
-        SET companyName = :clientName, address = :address, zipCode = :zipcode, place = :place, tel = :tel, email = :email, contactPerson = :contP WHERE customerNR = :id';
+        SET companyName = :clientName, address = :address, zipCode = :zipcode, place = :place, tel = :tel, email = :email, contactPerson = :contP, active = :active WHERE customerNR = :id';
 
         $q = $db->prepare($sql);
         $q->bindParam(':clientName', $clientName);
@@ -62,6 +62,7 @@ function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db
         $q->bindParam(':tel', $tel);
         $q->bindParam(':email', $email);
         $q->bindParam(':contP', $contP);
+        $q->bindParam(':active', $active);
         $q->bindParam(':id', $id);
 
         $q->execute();
@@ -99,7 +100,7 @@ function add($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db,
 
         } else {
 
-            $sql = 'INSERT INTO customer (companyName, address, zipCode, place, tel, email, contactPerson)  VALUES (:clientName, :address, :zipcode, :place, :tel, :email, :contP)';
+            $sql = 'INSERT INTO customer (companyName, address, zipCode, place, tel, email, contactPerson, active)  VALUES (:clientName, :address, :zipcode, :place, :tel, :email, :contP, 1)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':clientName', $clientName);
