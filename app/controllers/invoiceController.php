@@ -20,10 +20,17 @@ switch($_POST['type']){
         }
         
         break;
-    case 'delete';
+    case 'delete':
         $id = $_POST['inNR'];
         if (remove($db,$id,$messageBag)) {
         	header('location:' . HTTP . 'public/views/departments/finance/finance.php');
+        }
+        break;
+
+    case 'reset':
+        $id = $_POST['inNR'];
+        if (inReset($db,$id,$messageBag)) {
+            header('location:' . HTTP . 'public/views/departments/admin/admin.php');
         }
         break;
 }
@@ -107,5 +114,40 @@ function add($projectNR, $description, $inDate, $price, $db,$messageBag ) {
             $messageBag->Add('s','Invoice added');
             return true; 
         }
+    }
+}
+
+function inReset($db,$id,$messageBag){
+    $sql = 'SELECT * FROM invoices where invoiceNR = :id';
+    $q = $db->prepare($sql);
+    $q->bindParam(':id', $id);
+    $q->execute();
+
+
+
+
+    if ($q->rowCount() > 0) {
+
+        $sql = 'UPDATE invoices 
+        SET active = 1
+        WHERE invoiceNR = :id';
+
+        $q = $db->prepare($sql);
+        
+        $q->bindParam(':id', $id);
+
+        $q->execute();
+
+       
+        $messageBag->Add('s','invoice activated!!');
+        return true;
+
+        
+
+    } else {
+
+        $messageBag->Add('a',"invoice doesn't exicst and can't be activated!");
+        return false;
+        
     }
 }

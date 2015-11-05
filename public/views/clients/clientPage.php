@@ -107,7 +107,7 @@
         </div>
 
         <div class="seperator"></div>
-        <?php if (!$_SESSION['user']['userrole'] == 1): ?>
+        <?php if (!($_SESSION['user']['userrole'] == 1)): ?>
         
     
 		<form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
@@ -156,3 +156,4 @@
     <?php endforeach; ?>			
 </div>
 
+<?php require_once '../../footer.php'; ?>

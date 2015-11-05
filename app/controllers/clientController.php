@@ -4,9 +4,9 @@ require_once '../init.php';
 switch($_POST['type']){
     case 'add':
         if (add($_POST["clientName"], $_POST["address"], $_POST["zipcode"], $_POST["place"], $_POST["tel"], $_POST["email"], $_POST["contP"], $db, $messageBag)) {
-            header('location:' . HTTP . 'public/views/departments/development/development.php' );
+            header('location:' . HTTP . 'public/index.php' );
         }   else {
-            header('location:' . HTTP . 'public/views/departments/development/development.php' );
+            header('location:' . HTTP . 'public/index.php' );
         }
         
         break;
@@ -14,28 +14,48 @@ switch($_POST['type']){
 
         $id = $_POST['clientNR'];
         if (edit($_POST["clientName"], $_POST["address"], $_POST["zipcode"], $_POST["place"], $_POST["tel"], $_POST["email"], $_POST["contP"], $_POST["active"], $db, $id, $messageBag )) {
-        	header('location:' . HTTP . 'public/views/departments/development/clientPage.php?clientnr=' . $id );
+        	header('location:' . HTTP . 'public/views/clients/clientPage.php?clientnr=' . $id );
         } else {
-        	header('location:' . HTTP . 'public/views/departments/development/clientPage.php?clientnr=' . $id);
+        	header('location:' . HTTP . 'public/views/clients/clientPage.php?clientnr=' . $id);
         }
         
         break;
-    case 'delete';
+    case 'delete':
         $id = $_POST['clientNR'];
         if (remove($db,$id,$messageBag)) {
-        	header('location:' . HTTP . 'public/views/departments/development/development.php');
+        	header('location:' . HTTP . 'public/index.php');
+        } else {
+            header('location:' . HTTP . 'public/index.php');
+        }
+        break;
+    case 'reset':
+        $id = $_POST['clientNR'];
+        if (clientReset($db,$id,$messageBag)) {
+            header('location:' . HTTP . 'public/views/departments/admin/admin.php');
         }
         break;
 }
 
 function remove($db, $id, $messageBag){
 
-    $sql = 'DELETE FROM customer WHERE customerNR = :id';
+    $sql = "SELECT * FROM projects WHERE customerNR = :id";
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
-    $messageBag->Add('s','The Client is succesfully deleted'); 
-    return true;
+
+    if ($q->rowCount() > 0) {
+        $messageBag->Add('a','This client has one or more projects'); 
+        return False;
+    }   else {
+
+
+        $sql = 'DELETE FROM customer WHERE customerNR = :id';
+        $q = $db->prepare($sql);
+        $q->bindParam(':id', $id);
+        $q->execute();
+        $messageBag->Add('s','The Client is succesfully deleted'); 
+        return true;
+    }
 }
 
 
@@ -115,5 +135,40 @@ function add($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db,
             $messageBag->Add('s','Client added');
             return true; 
         }
+    }
+}
+
+function clientReset($db,$id,$messageBag){
+    $sql = 'SELECT * FROM customer where customerNR = :id';
+    $q = $db->prepare($sql);
+    $q->bindParam(':id', $id);
+    $q->execute();
+
+
+
+
+    if ($q->rowCount() > 0) {
+
+        $sql = 'UPDATE customer 
+        SET active = 1
+        WHERE customerNR = :id';
+
+        $q = $db->prepare($sql);
+        
+        $q->bindParam(':id', $id);
+
+        $q->execute();
+
+       
+        $messageBag->Add('s','Client activated!!');
+        return true;
+
+        
+
+    } else {
+
+        $messageBag->Add('a',"Client doesn't exicst and can't be edited!");
+        return false;
+        
     }
 }

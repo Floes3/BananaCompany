@@ -67,9 +67,11 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
         }
     ?>
 <div class="container">
-    <div class="col-md-10 dash-title">
-        <h1>Dashboard</h1>
-    </div>
+    <?php if ($_SESSION['user']['userrole'] == 4): ?>
+    <h1>Dashboard Finance</h1>
+<?php else: ?>
+    <h1>Dashboard</h1>
+<?php endif ?>
     <div class="table">
         <div class="col-md-6">
         <div class="tableOut">
@@ -169,6 +171,5 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
 
 </div>
 
-</body>
-</html>
+<?php require_once '../../../footer.php'; ?>
 

@@ -26,6 +26,12 @@ switch($_POST['type']){
         	header('location:' . HTTP . 'public/views/departments/development/development.php');
         }
         break;
+    case 'reset':
+        $id = $_POST['projectNR'];
+        if (prReset($db,$id,$messageBag)) {
+            header('location:' . HTTP . 'public/views/departments/admin/admin.php');
+        }
+        break;
 }
 
 function remove($db, $id, $messageBag){
@@ -104,5 +110,40 @@ function add($projectName, $customerNR, $description, $db,$messageBag ) {
             $messageBag->Add('s','Project added');
             return true; 
         }
+    }
+}
+
+function prReset($db,$id,$messageBag){
+    $sql = 'SELECT * FROM projects where projectNR = :id';
+    $q = $db->prepare($sql);
+    $q->bindParam(':id', $id);
+    $q->execute();
+
+
+
+
+    if ($q->rowCount() > 0) {
+
+        $sql = 'UPDATE projects 
+        SET active = 1
+        WHERE projectNR = :id';
+         
+        $q = $db->prepare($sql);
+        
+        $q->bindParam(':id', $id);
+
+        $q->execute();
+
+       
+        $messageBag->Add('s','project activated!!');
+        return true;
+
+        
+
+    } else {
+
+        $messageBag->Add('a',"project doesn't exicst and can't be activated!");
+        return false;
+        
     }
 }

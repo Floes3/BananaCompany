@@ -57,7 +57,11 @@
 <div class="container">
 
 <div class="col-md-10 dash-title">
+<?php if ($_SESSION['user']['userrole'] == 4): ?>
+    <h1>Dashboard Development</h1>
+<?php else: ?>
     <h1>Dashboard</h1>
+<?php endif ?>
 </div>
 
 <div class="table">
