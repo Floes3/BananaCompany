@@ -19,7 +19,18 @@ $results = $q->fetchAll();
 
 <header>
     <div class="col-md-12">
-        <h1>Barroc IT</h1>
+          <?php if ($_SESSION['user']['userrole'] == 4): ?>
+        <h1>Barroc IT | Admin</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 1): ?>
+        <h1>Barroc IT | Finance</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 2): ?>
+        <h1>Barroc IT | Development</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 3): ?>
+        <h1>Barroc IT | Sales</h1>
+    <?php endif ?>
     </div>
 </header>
 <div id='cssmenu'>
@@ -31,7 +42,7 @@ $results = $q->fetchAll();
             <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
          <?php else: ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/depatments/development/development.php' ?>'>Home</a></li>
+            <li class='active'><a href='<?php echo HTTP . 'public/index.php' ?>'>Home</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>   
         <?php endif ?>
     </ul>
@@ -45,7 +56,7 @@ $results = $q->fetchAll();
 <div class="container">
     <?php foreach ($results as $result): ?>
         <div class="col-md-10 dash-title">
-            <h1><?php echo $result['projectName'] ?> | Development</h1>
+            <h1>Project: <?php echo $result['projectName'] ?></h1>
         </div>
 
     	<div class="col-md-12">

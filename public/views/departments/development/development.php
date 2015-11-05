@@ -21,19 +21,30 @@
 
 <header>
     <div class="col-md-12">
-        <h1>Barroc IT</h1>
+        <?php if ($_SESSION['user']['userrole'] == 4): ?>
+        <h1>Barroc IT | Admin</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 1): ?>
+        <h1>Barroc IT | Finance</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 2): ?>
+        <h1>Barroc IT | Development</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 3): ?>
+        <h1>Barroc IT | Sales</h1>
+    <?php endif ?>
     </div>
 </header>
 <div id='cssmenu'>
     <ul>
         <?php if ($_SESSION['user']['userrole'] == 4): ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/admin/admin.php' ?>'>Home</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/sales/sales.php' ?>'>Sales</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/finance/finance.php' ?>'>Finance</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
+            <li><a href='<?php echo HTTP . 'public/views/departments/admin/admin.php' ?>'>Home</a></li>
+            <li><a href='<?php echo HTTP . 'public/views/departments/sales/sales.php' ?>'>Sales</a></li>
+            <li><a href='<?php echo HTTP . 'public/views/departments/finance/finance.php' ?>'>Finance</a></li>
+            <li><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
          <?php else: ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Home</a></li>
+            <li><a href='<?php echo HTTP . 'public/index.php' ?>'>Home</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>   
         <?php endif ?>
     </ul>
@@ -46,7 +57,7 @@
 <div class="container">
 
 <div class="col-md-10 dash-title">
-    <h1>Dashboard | Development</h1>
+    <h1>Dashboard</h1>
 </div>
 
 <div class="table">
@@ -90,7 +101,7 @@
             </thead>
             <?php foreach ($clients as $client): ?>
                 <tbody> 
-                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
+                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/clients/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
                         <td><?php echo $client['companyName'] ?></td>
                         <td><?php echo $client['address'] ?></td> 
                         <td><?php echo $client['contactPerson'] ?></td>
@@ -135,49 +146,7 @@
     </div>
 </div>
 
-<div class="seperator"></div>
-<div class="addClient">
-    <h2>Add Client</h2>
-    <div class="col-md-12">
-            
-        <form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
-            <input type="hidden" name="type" value="add">
-            <input type="hidden" name='clientNR' value=<?php echo $result['customerNR'] ?>>
-            <div class="row">
-                <div class=" col-md-3 form-group">
-                    <label for="clientName">Client name</label>
-                    <input class="form-control" type="text" name='clientName' >
-                </div>
-                <div class=" col-md-3 form-group">
-                    <label for="address">Address</label>
-                    <input class="form-control" type="text" name='address'>
-                </div>
-                <div class=" col-md-3 form-group">
-                    <label for="zipcode">Zipcode</label>
-                    <input class="form-control" type="text" name='zipcode' >
-                </div>
-                <div class=" col-md-3 form-group">
-                    <label for="place">Place</label>
-                    <input class="form-control" type="text" name='place' > 
-                </div>
-                 <div class=" col-md-3 form-group">
-                    <label for="tel">Tel Number</label>
-                    <input class="form-control" type="text" name='tel' > 
-                </div>
-                 <div class=" col-md-3 form-group">
-                    <label for="email">Email</label>
-                    <input class="form-control" type="text" name='email' > 
-                </div>
-                 <div class=" col-md-3 form-group">
-                    <label for="contP">Contact person</label>
-                    <input class="form-control" type="text" name='contP'> 
-                </div>
-                <div class=" col-md-3 form-group ">
-                    <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add Client'>
-                </div>
-            </div>
-        </form>
-    </div>
+
 </div>
 <?php require_once '../../../footer.php'; ?>
 

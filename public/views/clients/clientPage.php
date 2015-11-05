@@ -1,5 +1,5 @@
 <?php
-    require_once '../../../header.php';
+    require_once '../../header.php';
 
     if ( !isset($_SESSION['user']) ) {
         header('location: ../../../views/auth/login.php');
@@ -15,20 +15,31 @@
 
 <header>
     <div class="col-md-12">
-        <h1>Barroc IT</h1>
+    <?php if ($_SESSION['user']['userrole'] == 4): ?>
+        <h1>Barroc IT | Admin</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 1): ?>
+        <h1>Barroc IT | Finance</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 2): ?>
+        <h1>Barroc IT | Development</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 3): ?>
+        <h1>Barroc IT | Sales</h1>
+    <?php endif ?>
     </div>
 </header>
 <div id='cssmenu'>
     <ul>
         <?php if ($_SESSION['user']['userrole'] == 4): ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/admin/admin.php' ?>'>Home</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/sales/sales.php' ?>'>Sales</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/finance/finance.php' ?>'>Finance</a></li>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
-            <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
+            <li ><a href='<?php echo HTTP . 'public/views/departments/admin/admin.php' ?>'>Home</a></li>
+            <li ><a href='<?php echo HTTP . 'public/views/departments/sales/sales.php' ?>'>Sales</a></li>
+            <li ><a href='<?php echo HTTP . 'public/views/departments/finance/finance.php' ?>'>Finance</a></li>
+            <li ><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
+            <li style='float:right!important;'><a href="../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
          <?php else: ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/depatments/development/development.php' ?>'>Home</a></li>
-            <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>   
+            <li ><a href='<?php echo HTTP . 'public/index.php' ?>'>Home</a></li>
+            <li style='float:right!important;'><a href="../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>   
         <?php endif ?>
     </ul>
 </div>
@@ -41,7 +52,7 @@
 <div class="container">
     <?php foreach ($results as $result): ?>
         <div class="col-md-10 dash-title">
-            <h1><?php echo $result['companyName'] ?> | Development</h1>
+            <h1>Client: <?php echo $result['companyName'] ?></h1>
         </div>
 
     	<div class="col-md-12">                    
@@ -96,6 +107,9 @@
         </div>
 
         <div class="seperator"></div>
+        <?php if (!$_SESSION['user']['userrole'] == 1): ?>
+        
+    
 		<form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
 			<input type="hidden" name="type" value="edit">
 			<input type="hidden" name='clientNR' value=<?php echo $result['customerNR'] ?>>
@@ -138,6 +152,7 @@
 				<input class="btn btn-primary pull-right" type="submit" id="submit" value='Edit'>
 			</div>
         </form>
+        <?php endif ?>
     <?php endforeach; ?>			
 </div>
 
