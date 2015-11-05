@@ -11,7 +11,7 @@ if ( !isset($_SESSION['user']) ) {
         header('location:' . HTTP . 'public/index.php');
     }
 
-$sql = "SELECT appointmentsNR, customerNR, company, firstname, lastname, date, time, subject, location, attending people, description, customer.customerNR FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR";
+$sql = "SELECT appointmentsNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description, customer.customerNR FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
@@ -61,7 +61,7 @@ $clients = $q->fetchAll();
                  <tr>
                     <th>Company</th>
                     <th>Subject</th>
-                    <th>Date</th>
+                    <th>appdate</th>
                 </tr>
             </thead>
 
@@ -73,7 +73,7 @@ $clients = $q->fetchAll();
 
                         <td><?php echo $result['subject'] ?></td>
 
-                        <td><?php echo $result['date'] ?></td>
+                        <td><?php echo $result['appdate'] ?></td>
 
                     </tr>
                 </tbody>
@@ -147,7 +147,7 @@ $clients = $q->fetchAll();
 
         <form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
             <input type="hidden" name="type" value="add">
-            <input type="hidden" name='clientNR' value=<?php echo $result['customerNR'] ?>>
+            <input type="hidden" name='clientNR' value=<?php echo $results['customerNR'] ?>>
             <div class="row">
                 <div class=" col-md-3 form-group">
                     <label for="clientName">Client name</label>

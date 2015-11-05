@@ -3,7 +3,7 @@ require_once '../init.php';
 
 switch($_POST['type']){
     case 'add':
-        if (add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attending people"], $_POST["description"], $db, $messageBag)) {
+        if (add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"], $db, $messageBag)) {
             header('location:' . HTTP . 'public/views/departments/sales/sales.php' );
         }   else {
             header('location:' . HTTP . 'public/views/departments/sales/sales.php' );
@@ -13,7 +13,7 @@ switch($_POST['type']){
     case 'edit':
 
         $id = $_POST['appointmentNR'];
-        if (edit($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attending people"], $_POST["description"], $db, $messageBag)) {
+        if (edit($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"], $db, $messageBag)) {
         	header('location:' . HTTP . 'public/views/departments/sales/appointmentPage.php?appointmentnr=' . $id );
         } else {
         	header('location:' . HTTP . 'public/views/departments/sales/appointmentPage.php?appointmentnr=' . $id);
@@ -49,8 +49,8 @@ function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $app
 
 
     if ($q->rowCount() > 0) {
-    	$sql = 'UPappdate appointments
-        SET appointmentNR = :appointmentNR, customerNR = :customerNR, company = :company, firstname = :firstname, lastname = :lastname, appdate = :appdate, time = :time, subject = :subject, location = :location, attending people = :attending people, description = :description, WHERE appointmentNR = :id';
+    	$sql = 'UPDATE appointments
+        SET appointmentNR = :appointmentNR, customerNR = :customerNR, company = :company, firstname = :firstname, lastname = :lastname, appdate = :appdate, time = :time, subject = :subject, location = :location, attendingPeople = :attendingPeople, description = :description, WHERE appointmentNR = :id';
 
         $q = $db->prepare($sql);
         $q->bindParam(':appointmentNR', $appointmentNR);
@@ -62,13 +62,13 @@ function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $app
         $q->bindParam(':time', $time);
         $q->bindParam(':subject', $subject);
         $q->bindParam(':location', $location);
-        $q->bindParam(':attending people', $attendingpeople);
+        $q->bindParam(':attendingPeople', $attendingpeople);
         $q->bindParam(':description', $description);
         $q->bindParam(':id', $id);
         $q->execute();
 
 
-        $messageBag->Add('s','Appointment upappdated!!');
+        $messageBag->Add('s','Appointment updated!!');
         return true;
 
 
@@ -81,7 +81,7 @@ function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $app
     }
 }
 
-function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attending people"], $_POST["description"] ) {
+function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"] ) {
 
     if (empty($projectName)) {
 
@@ -100,7 +100,7 @@ function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $
 
         } else {
 
-            $sql = 'INSERT INTO appointments (appointmentNR, customerNR, company, firstname, lastname, appdate, time, subject, location, attending people, description)  VALUES (:appointmentNR, :customerNR, :company, :firstname, :lastname, :appdate, :time, :subject, :location, :attending people, :description, 1)';
+            $sql = 'INSERT INTO appointments (appointmentNR, customerNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description)  VALUES (:appointmentNR, :customerNR, :company, :firstname, :lastname, :appdate, :time, :subject, :location, :attendingPeople, :description, 1)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':appointmentNR', $appointmentNR);,
@@ -112,7 +112,7 @@ function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $
             $q->bindParam(':time', $time);
             $q->bindParam(':subject', $subject);
             $q->bindParam(':location', $location);
-            $q->bindParam(':attending people', $attendingpeople);
+            $q->bindParam(':attendingPeople', $attendingpeople);
             $q->bindParam(':description', $description);
             $q->bindParam(':id', $id);
             $q->execute();
