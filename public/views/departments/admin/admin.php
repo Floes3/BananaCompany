@@ -58,7 +58,7 @@ $users = $q->fetchAll();
 
 
 <div class="table">
-        <div class="col-md-6">
+    <div class="col-md-6">
         <div class="tableOut">
             <h2>Inactive invoices</h2>
             <table class="table table-hover">
@@ -79,7 +79,7 @@ $users = $q->fetchAll();
                     <td><?php echo $result['description'] ?></td>
                     <td><?php echo $result['inDate'] ?></td>
                     <td>
-                        <form action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
+                        <form action="<?php echo HTTP . 'app/controllers/invoiceController.php' ?>" method='POST'>
                             <input type="hidden" name="type" value="reset">
                             <input type="hidden" name='inNR' value=<?php echo $result['invoiceNR'] ?>>
                             <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Reset'>
@@ -92,47 +92,46 @@ $users = $q->fetchAll();
                 <?php endforeach; ?>
             </table>
         </div>
-        </div>
-        <div class="col-md-6">
-            <div class="tableOut">
-                <h2>Inactive clients</h2>
+    </div>
+    <div class="col-md-6">
+        <div class="tableOut">
+        <h2>Inactive clients</h2>
+            <table class='table table-hover'>
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Address</th>
+                        <th>Contact person</th>
+                        <th>Reset</th>
+                    </tr>
+                </thead>
+                <?php foreach ($clients as $client): ?>
+                <tbody> 
 
-                <table class='table table-hover'>
-                    <thead>
-                        <tr>
-                            <th>Company Name</th>
-                            <th>Address</th>
-                            <th>Contact person</th>
-                            <th>Reset</th>
-                        </tr>
-                    </thead>
-                    <?php foreach ($clients as $client): ?>
-                    <tbody> 
-
-                        <tr>
-                            <td><?php echo $client['companyName'] ?></td>
-                            <td><?php echo $client['address'] ?></td> 
-                            <td><?php echo $client['contactPerson'] ?></td>
-                            <td>
-                                <form action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
-                                    <input type="hidden" name="type" value="reset">
-                                    <input type="hidden" name='clientNR' value=<?php echo $client['customerNR'] ?>>
-                                    <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Reset'>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <td><?php echo $client['companyName'] ?></td>
+                        <td><?php echo $client['address'] ?></td> 
+                        <td><?php echo $client['contactPerson'] ?></td>
+                        <td>
+                            <form action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
+                                <input type="hidden" name="type" value="reset">
+                                <input type="hidden" name='clientNR' value=<?php echo $client['customerNR'] ?>>
+                                <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Reset'>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
                 <?php endforeach; ?>
 
-                </table>
-            </div>
+            </table>
         </div>
     </div>
-<div class="seperator"></div>
-    <div class="col-md-6">
-       
-        <h2>Inactive projects</h2>
+</div>
 
+<div class="seperator"></div>
+<div class="table">
+    <div class="col-md-6">  
+    <h2>Inactive projects</h2>
         <table class='table table-hover'>
             <thead>
                  <tr>
@@ -161,26 +160,22 @@ $users = $q->fetchAll();
                 </tbody>
             <?php endforeach; ?>
         </table>
-    
     </div>
-<div class="seperator"></div>
+    <div class="col-md-6">
+    <h2>Users</h2>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Userrole</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
 
-<div class="col-md-12">
-     
-            <h2>Users</h2>
-            <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Userrole</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-
-                <?php foreach ($users as $user): ?>
-                
-                <tbody>
-                  <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/clients/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
+            <?php foreach ($users as $user): ?>
+            
+            <tbody>
+              <tr>
                     <td><?php echo $user['name'] ?></td>
                     <td><?php
                         if ($user['userrole'] == 4) {
@@ -200,12 +195,17 @@ $users = $q->fetchAll();
                             <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Delete'>
                         </form>
                     </td>
-                   
-                  </tr>
-                  
-                </tbody>
-                <?php endforeach; ?>
-            </table>
+               
+                </tr>
+              
+            </tbody>
+            <?php endforeach; ?>
+        </table>
+    </div>
+
+
+
+        
     <div class="seperator"></div>
     <div class="addUser">
     <h2>Add User</h2>
