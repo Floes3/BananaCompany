@@ -1,6 +1,5 @@
 <?php
 
-
 require_once '../../../header.php';
 
 if ( !isset($_SESSION['user']) ) {
@@ -8,7 +7,7 @@ if ( !isset($_SESSION['user']) ) {
     exit;
 }
 
-$projectNR = $_GET['appointmentnr'];
+$appointmentNR = $_GET['appointmentnr'];
 $sql = "SELECT * FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR WHERE appointmentNR = $appointmentNR;";
 
 $q= $db->query($sql);
@@ -45,7 +44,7 @@ $results = $q->fetchAll();
 <div class="container">
     <?php foreach ($results as $result): ?>
         <div class="col-md-10 dash-title">
-            <h1><?php echo $result['projectName'] ?> | Sales</h1>
+            <h1>appointment: <?php echo $result['subject'] ?></h1>
         </div>
 
     	<div class="col-md-12">
@@ -53,7 +52,7 @@ $results = $q->fetchAll();
             <table class='table table-hover'>
                 <thead>
                      <tr>
-                        <th>Project name</th>
+                        <th>Subject</th>
                         <th>Company</th>
                         <th>Description</th>
                         <?php if ($_SESSION['user']['userrole'] == 4): ?>
@@ -66,7 +65,7 @@ $results = $q->fetchAll();
                     <tr>
                         <td><?php echo $result['subject'] ?></td>
                         <td><?php echo $result['company'] ?></td>
-                        <td><?php echo $result['date'] ?></td>
+                        <td><?php echo $result['appdate'] ?></td>
                         <?php if ($_SESSION['user']['userrole'] == 4): ?>
                             <td>
                                 <form action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
@@ -89,13 +88,50 @@ $results = $q->fetchAll();
     		<input type="hidden" name="type" value="edit">
     		<input type="hidden" name='appointmentNR' value=<?php echo $result['appointmentNR'] ?>>
     		<div class=" col-md-3 form-group">
-    			<label for="projectName">Project name</label>
-    			<input class="form-control" type="text" name='projectName' value='<?php echo $result['projectName'] ?>'>
+    			<label for="appointmentNR">appointmentNR</label>
+    			<input class="form-control" type="text" name='appointmentNR' value='<?php echo $result['appointmentNR'] ?>'>
     		</div>
     		<div class=" col-md-3 form-group">
-    			<label for="desc">Description</label>
-    			<input class="form-control" type="text" name='description' value='<?php echo $result['description'] ?>'>
+    			<label for="customerNR">customerNR</label>
+    			<input class="form-control" type="text" name='customerNR' value='<?php echo $result['customerNR'] ?>'>
     		</div>
+            <div class=" col-md-3 form-group">
+                <label for="company">company</label>
+                <input class="form-control" type="text" name='company' value='<?php echo $result['company'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="firstname">firstname</label>
+                <input class="form-control" type="text" name='firstname' value='<?php echo $result['firstname'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="lastname">lastname</label>
+                <input class="form-control" type="text" name='lastname' value='<?php echo $result['lastname'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="appdate">appdate</label>
+                <input class="form-control" type="text" name='appdate' value='<?php echo $result['appdate'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="time">time</label>
+                <input class="form-control" type="text" name='time' value='<?php echo $result['time'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="subject">subject</label>
+                <input class="form-control" type="text" name='subject' value='<?php echo $result['subject'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="location">location</label>
+                <input class="form-control" type="text" name='location' value='<?php echo $result['location'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="attendingPeople">attendingPeople</label>
+                <input class="form-control" type="text" name='attendingPeople' value='<?php echo $result['attendingPeople'] ?>'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="description">description</label>
+                <input class="form-control" type="text" name='description' value='<?php echo $result['description'] ?>'>
+            </div>
+
     		<div class=" col-md-3 form-group">
     			<label for="projectName">active</label>
     			<select class="form-control" name="active" >

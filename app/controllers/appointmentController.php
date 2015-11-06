@@ -3,7 +3,7 @@ require_once '../init.php';
 
 switch($_POST['type']){
     case 'add':
-        if (add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"], $db, $messageBag)) {
+        if (add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"], $db, $messageBag)) {
             header('location:' . HTTP . 'public/views/departments/sales/sales.php' );
         }   else {
             header('location:' . HTTP . 'public/views/departments/sales/sales.php' );
@@ -39,7 +39,7 @@ function remove($db, $id, $messageBag){
 }
 
 
-function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $appdate, $time, $subject, $location, $attendingpeople, $description, $db, $id, $messageBag ) {
+function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $appdate, $time, $subject, $location, $attendingpeople, $description, $db, $id, $messageBag) {
     $sql = 'SELECT * FROM appointments WHERE appointmentNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
@@ -81,14 +81,15 @@ function edit($appointmentNR, $customerNR, $company, $firstname, $lastname, $app
     }
 }
 
-function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $_POST["firstname"], $_POST["lastname"], $_POST["appdate"], $_POST["time"], $_POST["subject"], $_POST["location"], $_POST["attendingPeople"], $_POST["description"] ) {
+function add($appointmentNR, $customerNR, $firstname, $lastname, $appdate, $time, $subject, $location, $attendingpeople, $description, $db, $messageBag  ) {
 
-    if (empty($projectName)) {
+
+    if (empty($subject)) {
 
         $messageBag->Add('a',"Appointment name isn't filled in!");
         return false;
     } else {
-        $sql = 'SELECT * FROM apointments where appointmentNR = :appointmentNR';
+        $sql = 'SELECT * FROM appointments where appointmentNR = :appointmentNR';
         $q = $db->prepare($sql);
         $q->bindParam(':appointmentNR', $appointmentNR);
         $q->execute();
@@ -100,12 +101,12 @@ function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $
 
         } else {
 
-            $sql = 'INSERT INTO appointments (appointmentNR, customerNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description)  VALUES (:appointmentNR, :customerNR, :company, :firstname, :lastname, :appdate, :time, :subject, :location, :attendingPeople, :description, 1)';
+            $sql = 'INSERT INTO appointments (customerNR, firstname, lastname, appdate, time, subject, location, attendingPeople, description)  VALUES ( :customerNR, :firstname, :lastname, :appdate, :time, :subject, :location, :attendingPeople, :description)';
 
             $q = $db->prepare($sql);
-            $q->bindParam(':appointmentNR', $appointmentNR);,
+
             $q->bindParam(':customerNR', $customerNR);
-            $q->bindParam(':company', $company);
+
             $q->bindParam(':firstname', $firstname);
             $q->bindParam(':lastname', $lastname);
             $q->bindParam(':appdate', $appdate);
@@ -114,8 +115,9 @@ function add($_POST["appointmentNR"], $_POST["customerNR"], $_POST["company"], $
             $q->bindParam(':location', $location);
             $q->bindParam(':attendingPeople', $attendingpeople);
             $q->bindParam(':description', $description);
-            $q->bindParam(':id', $id);
+
             $q->execute();
+
             $messageBag->Add('s','Appointment added');
             return true;
         }

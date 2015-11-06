@@ -11,7 +11,7 @@ if ( !isset($_SESSION['user']) ) {
         header('location:' . HTTP . 'public/index.php');
     }
 
-$sql = "SELECT appointmentsNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description, customer.customerNR FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR";
+$sql = "SELECT appointmentNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description, customer.customerNR FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
@@ -19,7 +19,7 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
 $q= $db->query($sql);
 $clients = $q->fetchAll();
 
- ?>
+?>
 
 <header>
     <div class="col-md-12">
@@ -129,27 +129,56 @@ $clients = $q->fetchAll();
     <div class="col-md-12">
         <form class="lineout" action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
             <input type="hidden" name="type" value="add">
-
             <div class=" col-md-3 form-group">
-                <label for="projectName">Project name</label>
-                <input class="form-control" type="text" name='projectName'>
-            </div>
-
-            <div class=" col-md-3 form-group">
-                <label for="projectName">Company</label>
+                <label for="Company">Company</label>
                 <select class="form-control" name="customerNR">
                     <?php foreach ($clients as $client): ?>
                         <option value="<?php echo $client['customerNR']?>" selected><?php echo $client['companyName'] ?></option>
                     <?php endforeach ?>
                 </select>
-`           </div>
+            </div>
             <div class=" col-md-3 form-group">
-                <label for="desc">Description</label>
+                <label for="appointmentNR">appointmentNR</label>
+                <input class="form-control" type="text" name='appointmentNR'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="customerNR">customerNR</label>
+                <input class="form-control" type="text" name='customerNR'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="firstname">firstname</label>
+                <input class="form-control" type="text" name='firstname'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="lastname">lastname</label>
+                <input class="form-control" type="text" name='lastname'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="appdate">appdate</label>
+                <input class="form-control" type="text" name='appdate'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="time">time</label>
+                <input class="form-control" type="text" name='time'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="subject">subject</label>
+                <input class="form-control" type="text" name='subject'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="location">location</label>
+                <input class="form-control" type="text" name='location'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="attendingPeople">attendingPeople</label>
+                <input class="form-control" type="text" name='attendingPeople'>
+            </div>
+            <div class=" col-md-3 form-group">
+                <label for="description">description</label>
                 <input class="form-control" type="text" name='description'>
             </div>
-
             <div class=" col-md-3 form-group ">
-                <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add Appointment'>
+                <input class="btn btn-primary pull-right" type="submit" id="submit" value="Add appointment">
             </div>
         </form>
     </div>
@@ -162,7 +191,7 @@ $clients = $q->fetchAll();
 
         <form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
             <input type="hidden" name="type" value="add">
-            
+
             <div class="row">
                 <div class=" col-md-3 form-group">
                     <label for="clientName">Client name</label>
