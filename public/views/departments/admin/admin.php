@@ -14,16 +14,20 @@ $sql = "SELECT invoices.description, invoices.invoiceNR, invoices.inDate, custom
         INNER JOIN projects ON projects.projectNR = invoices.projectNR 
         INNER JOIN customer ON customer.customerNR = projects.customerNR
         WHERE invoices.active = 0";
-    $q= $db->query($sql);
-    $results = $q->fetchAll();
+$q= $db->query($sql);
+$results = $q->fetchAll();
 
 $sql = "SELECT * FROM customer WHERE active = 0;";
-    $q= $db->query($sql);
-    $clients = $q->fetchAll();
+$q= $db->query($sql);
+$clients = $q->fetchAll();
 
-    $sql = "SELECT projectName,companyName,projectNR, customer.customerNR FROM projects INNER JOIN customer ON projects.customerNR = customer.customerNR WHERE projects.active = 0;";
-    $q= $db->query($sql);
-    $prResults = $q->fetchAll();
+$sql = "SELECT projectName,companyName,projectNR, customer.customerNR FROM projects INNER JOIN customer ON projects.customerNR = customer.customerNR WHERE projects.active = 0;";
+$q= $db->query($sql);
+$prResults = $q->fetchAll();
+
+$sql = "SELECT * FROM users";
+$q= $db->query($sql);
+$users = $q->fetchAll();
     
 ?>
 
@@ -159,8 +163,80 @@ $sql = "SELECT * FROM customer WHERE active = 0;";
         </table>
     
     </div>
+<div class="seperator"></div>
 
+<div class="col-md-12">
+     
+            <h2>Users</h2>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Userrole</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
 
+                <?php foreach ($users as $user): ?>
+                
+                <tbody>
+                  <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/clients/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
+                    <td><?php echo $user['name'] ?></td>
+                    <td><?php
+                        if ($user['userrole'] == 4) {
+                            echo 'Admin';
+                         } elseif ($user['userrole'] == 3) {
+                            echo 'Sales';
+                         } elseif ($user['userrole'] == 2) {
+                            echo 'Development';
+                         } else {
+                            echo 'Finance';
+                         }
+                        ?>
+                    <td>
+                        <form action="<?php echo HTTP . 'app/controllers/authController.php' ?>" method='POST'>
+                            <input type="hidden" name="type" value="delete">
+                            <input type="hidden" name='userID' value=<?php echo $user['id'] ?>>
+                            <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Delete'>
+                        </form>
+                    </td>
+                   
+                  </tr>
+                  
+                </tbody>
+                <?php endforeach; ?>
+            </table>
+    <div class="seperator"></div>
+    <div class="addUser">
+    <h2>Add User</h2>
+    <div class="col-md-12">
+        <form class="lineout" action="<?php echo HTTP . 'app/controllers/authController.php' ?>" method='POST'>
+            <input type="hidden" name="type" value="register">
+            
+            <div class=" col-md-3 form-group">
+                <label for="name">Name</label>
+                <input class="form-control" type="text" name='name'>
+            </div>
+
+            <div class=" col-md-3 form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name='password'>
+            </div>
+            
+            <div class=" col-md-3 form-group">
+                <label for="userrole">Userrole</label>
+                <select class="form-control" name="userrole" >
+                        <option value="1">Finance</option>
+                        <option value="2">Development</option>
+                        <option value="3">Sales</option>
+                        <option value="4">Admin</option>
+                </select>
+`           </div>  
+            <div class=" col-md-3 form-group ">
+                <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add user'>
+            </div>
+        </form>
+    </div>
 
 </div>
 

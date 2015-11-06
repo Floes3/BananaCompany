@@ -23,7 +23,18 @@ $clients = $q->fetchAll();
 
 <header>
     <div class="col-md-12">
-        <h1>Barroc IT</h1>
+        <?php if ($_SESSION['user']['userrole'] == 4): ?>
+        <h1>Barroc IT | Admin</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 1): ?>
+        <h1>Barroc IT | Finance</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 2): ?>
+        <h1>Barroc IT | Development</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 3): ?>
+        <h1>Barroc IT | Sales</h1>
+    <?php endif ?>
     </div>
 </header>
 <div id='cssmenu'>
@@ -48,7 +59,11 @@ $clients = $q->fetchAll();
 <div class="container">
 
 <div class="col-md-10 dash-title">
-    <h1>Dashboard | Sales</h1>
+    <?php if ($_SESSION['user']['userrole'] == 4): ?>
+    <h1>Dashboard Sales</h1>
+<?php else: ?>
+    <h1>Dashboard</h1>
+<?php endif ?>
 </div>
 
 <div class="table">
@@ -95,7 +110,7 @@ $clients = $q->fetchAll();
             </thead>
             <?php foreach ($clients as $client): ?>
                 <tbody>
-                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/sales/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
+                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/clients/clientPage.php?clientnr=' .  $client['customerNR'] ?>'>
                         <td><?php echo $client['companyName'] ?></td>
                         <td><?php echo $client['address'] ?></td>
                         <td><?php echo $client['contactPerson'] ?></td>
@@ -134,7 +149,7 @@ $clients = $q->fetchAll();
             </div>
 
             <div class=" col-md-3 form-group ">
-                <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add project'>
+                <input class="btn btn-primary pull-right" type="submit" id="submit" value='Add Appointment'>
             </div>
         </form>
     </div>
@@ -147,7 +162,7 @@ $clients = $q->fetchAll();
 
         <form class="lineout" action="<?php echo HTTP . 'app/controllers/clientController.php' ?>" method='POST'>
             <input type="hidden" name="type" value="add">
-            <input type="hidden" name='clientNR' value=<?php echo $results['customerNR'] ?>>
+            
             <div class="row">
                 <div class=" col-md-3 form-group">
                     <label for="clientName">Client name</label>

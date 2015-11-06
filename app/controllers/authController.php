@@ -5,6 +5,9 @@ if (isset($_GET['logout'])) {
     header('Location: ' .HTTP . 'public/views/auth/Login.php');
 }
 
+
+
+
 switch($_POST['type']){
 
     case 'login':
@@ -17,19 +20,20 @@ switch($_POST['type']){
         }
         break;
 
-    case 'logout':
-        if(logout($messageBag)){
-            header('Location: ' .HTTP . 'public/views/auth/Login.php');
+    case 'register':
+ 
+        if(register($db, $_POST['name'],$_POST['password'],$_POST['userrole'],$messageBag)){
+            header('Location: ' .HTTP . 'public/index.php');
+        } else {
+
+            header('Location: ' .HTTP . 'public/index.php');
         }
         break;
 
-    case 'register':
-        if(register($db, $_POST['username'],$_POST['password'],$messageBag)){
-            header('Location: ' .HTTP . 'public/views/auth/Login.php');
-        } else {
-
-            header('Location: ' .HTTP . 'public/views/auth/register.php');
-        }
+    case 'delete':
+            if (delete($_POST['userID'],$db,$messageBag)) {
+                header('Location: ' .HTTP . 'public/index.php');
+            }
         break;
 }
 
@@ -75,33 +79,46 @@ function logout($messageBag){
     return true;
 }
 
-function register($db,$username,$password,$messageBag){
-
+function register($db,$username,$password, $userrole,$messageBag){
     if(empty($username) || empty($password)){
-        $messageBag->Add('a','Een of meerdere verplichte velden zijn niet ingevuld!');
+        $messageBag->Add('a',"One or more fields aren't filled in!");
         return false;
     } else {
 
-        $sql = 'SELECT * FROM users where username = :username';
+        $sql = 'SELECT * FROM users where name = :username';
         $q = $db->prepare($sql);
         $q->bindParam(':username', $username);
         $q->execute();
 
         if ($q->rowCount() > 0) {
-            $messageBag->Add('a', 'Username bestaat al!');
+            $messageBag->Add('a', 'Username already exisct!');
             return false;
 
         } else {
             $hashed = password_hash($password,PASSWORD_DEFAULT);
 
-            $sql = 'INSERT INTO users (username, password)  VALUES (:username,:hashed)';
+            $sql = 'INSERT INTO users (name, password, userrole)  VALUES (:username,:hashed, :userrole)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':username', $username);
             $q->bindParam(':hashed', $hashed);
+            $q->bindParam(':userrole', $userrole);
             $q->execute();
-            $messageBag->Add('a','Succesvol geregistreerd!');
+            $messageBag->Add('a','User succesfully created!');
             return true;
         }
     }
 }
+
+function delete($id,$db,$messageBag){
+    $sql = 'DELETE FROM users WHERE id = :id';
+    $q = $db->prepare($sql);
+    $q->bindParam(':id', $id);
+    $q->execute();
+    $messageBag->Add('s','The User is succesfully deleted'); 
+    return true;
+}
+
+
+
+
