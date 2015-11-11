@@ -7,9 +7,8 @@ if ( !isset($_SESSION['user']) ) {
     exit;
 }
 
-$appointmentNR = $_GET['appointmentnr'];
-$sql = "SELECT * FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR WHERE appointmentNR = $appointmentNR;";
-
+$appointmentNR = $_GET['appNR'];
+$sql = "SELECT tbl_customers.companyName, tbl_customers.contactPerson , tbl_appointments.* FROM tbl_appointments INNER JOIN tbl_customers ON tbl_appointments.customerNR = tbl_customers.customerNR WHERE tbl_appointments.appointmentNR = $appointmentNR ";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
@@ -18,7 +17,18 @@ $results = $q->fetchAll();
 
 <header>
     <div class="col-md-12">
-        <h1>Barroc IT</h1>
+        <?php if ($_SESSION['user']['userrole'] == 4): ?>
+        <h1>Barroc IT | Admin</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 1): ?>
+        <h1>Barroc IT | Finance</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 2): ?>
+        <h1>Barroc IT | Development</h1>
+    <?php endif ?>
+    <?php if ($_SESSION['user']['userrole'] == 3): ?>
+        <h1>Barroc IT | Sales</h1>
+    <?php endif ?>
     </div>
 </header>
 <div id='cssmenu'>
@@ -30,7 +40,7 @@ $results = $q->fetchAll();
             <li class='active'><a href='<?php echo HTTP . 'public/views/departments/development/development.php' ?>'>Development</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
          <?php else: ?>
-            <li class='active'><a href='<?php echo HTTP . 'public/views/depatments/development/development.php' ?>'>Home</a></li>
+             <li ><a href='<?php echo HTTP . 'public/index.php' ?>'>Home</a></li>
             <li style='float:right!important;'><a href="../../../../app/controllers/authController.php?logout=true" name="type" >Logout</a></li>
         <?php endif ?>
     </ul>
@@ -52,9 +62,12 @@ $results = $q->fetchAll();
             <table class='table table-hover'>
                 <thead>
                      <tr>
+                        <th>Client</th>
                         <th>Subject</th>
-                        <th>Company</th>
+                        <th>Attending Person</th>
+                        <th>Date</th>
                         <th>Description</th>
+                        <th>Location</th>
                         <?php if ($_SESSION['user']['userrole'] == 4): ?>
                             <th>Delete</th>
                         <?php endif; ?>
@@ -63,9 +76,12 @@ $results = $q->fetchAll();
 
                 <tbody>
                     <tr>
+                        <td><?php echo $result['companyName'] ?></td>
                         <td><?php echo $result['subject'] ?></td>
-                        <td><?php echo $result['company'] ?></td>
+                        <td><?php echo $result['contactPerson'] ?></td>
                         <td><?php echo $result['appdate'] ?></td>
+                        <td><?php echo $result['description'] ?></td>
+                        <td><?php echo $result['location'] ?></td>
                         <?php if ($_SESSION['user']['userrole'] == 4): ?>
                             <td>
                                 <form action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
@@ -85,64 +101,35 @@ $results = $q->fetchAll();
         <div class="seperator"></div>
 
     	<form class="lineout" action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
-    		<input type="hidden" name="type" value="edit">
-    		<input type="hidden" name='appointmentNR' value=<?php echo $result['appointmentNR'] ?>>
-    		<div class=" col-md-3 form-group">
-    			<label for="appointmentNR">appointmentNR</label>
-    			<input class="form-control" type="text" name='appointmentNR' value='<?php echo $result['appointmentNR'] ?>'>
-    		</div>
-    		<div class=" col-md-3 form-group">
-    			<label for="customerNR">customerNR</label>
-    			<input class="form-control" type="text" name='customerNR' value='<?php echo $result['customerNR'] ?>'>
-    		</div>
+            <input type="hidden" name="appointmentNR" value="<?php echo $result['appointmentNR'] ?>">
+            <input type="hidden" name="type" value="edit">
             <div class=" col-md-3 form-group">
-                <label for="company">company</label>
-                <input class="form-control" type="text" name='company' value='<?php echo $result['company'] ?>'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="firstname">firstname</label>
-                <input class="form-control" type="text" name='firstname' value='<?php echo $result['firstname'] ?>'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="lastname">lastname</label>
-                <input class="form-control" type="text" name='lastname' value='<?php echo $result['lastname'] ?>'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="appdate">appdate</label>
-                <input class="form-control" type="text" name='appdate' value='<?php echo $result['appdate'] ?>'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="time">time</label>
-                <input class="form-control" type="text" name='time' value='<?php echo $result['time'] ?>'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="subject">subject</label>
+                <label for="subject">Subject</label>
                 <input class="form-control" type="text" name='subject' value='<?php echo $result['subject'] ?>'>
+            </div>             
+            <div class=" col-md-3 form-group">
+                <label for="appdate">Date</label>
+                <input class="form-control" type="text" name='appdate' value='<?php echo $result['appdate'] ?>'>
+            </div>     
+            <div class=" col-md-3 form-group">
+                <label for="description">Description</label>
+                <input class="form-control" type="text" name='description' value='<?php echo $result['description'] ?>'>
             </div>
             <div class=" col-md-3 form-group">
-                <label for="location">location</label>
+                <label for="location">Location</label>
                 <input class="form-control" type="text" name='location' value='<?php echo $result['location'] ?>'>
             </div>
             <div class=" col-md-3 form-group">
-                <label for="attendingPeople">attendingPeople</label>
-                <input class="form-control" type="text" name='attendingPeople' value='<?php echo $result['attendingPeople'] ?>'>
+                <label for="active">Active</label>
+                <select class="form-control" name="active" >
+                    <option value="1" selected>Yes</option>
+                    <option value="0">No</option>
+                </select>
             </div>
-            <div class=" col-md-3 form-group">
-                <label for="description">description</label>
-                <input class="form-control" type="text" name='description' value='<?php echo $result['description'] ?>'>
+            <div class=" col-md-3 form-group ">
+                <input class="btn btn-primary pull-right" type="submit" id="submit" value="Edit appointment">
             </div>
 
-    		<div class=" col-md-3 form-group">
-    			<label for="projectName">active</label>
-    			<select class="form-control" name="active" >
-            		<option value="1" selected>Yes</option>
-    				<option value="0">No</option>
-    			</select>
-
-    		</div>
-    		<div class=" col-md-3 form-group ">
-    			<input class="btn btn-primary pull-right" type="submit" id="submit" value='Edit'>
-    		</div>
         </form>
     <?php endforeach; ?>
 </div>

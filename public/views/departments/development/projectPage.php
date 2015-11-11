@@ -9,7 +9,7 @@ if ( !isset($_SESSION['user']) ) {
 }
 
 $projectNR = $_GET['projectnr'];
-$sql = "SELECT * FROM projects INNER JOIN customer ON projects.customerNR = customer.customerNR WHERE projectNR = $projectNR;";
+$sql = "SELECT * FROM tbl_projects INNER JOIN tbl_customers ON tbl_projects.customerNR = tbl_customers.customerNR WHERE projectNR = $projectNR;";
 
 $q= $db->query($sql);
 $results = $q->fetchAll();

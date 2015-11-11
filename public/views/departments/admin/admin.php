@@ -9,25 +9,29 @@
         header('location:' . HTTP . 'public/index.php');
     }
 
-$sql = "SELECT invoices.description, invoices.invoiceNR, invoices.inDate, customer.companyName  
-        FROM invoices 
-        INNER JOIN projects ON projects.projectNR = invoices.projectNR 
-        INNER JOIN customer ON customer.customerNR = projects.customerNR
-        WHERE invoices.active = 0";
+$sql = "SELECT tbl_invoices.description, tbl_invoices.invoiceNR, tbl_invoices.inDate, tbl_customers.companyName  
+        FROM tbl_invoices 
+        INNER JOIN tbl_projects ON tbl_projects.projectNR = tbl_invoices.projectNR 
+        INNER JOIN tbl_customers ON tbl_customers.customerNR = tbl_projects.customerNR
+        WHERE tbl_invoices.active = 0";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
-$sql = "SELECT * FROM customer WHERE active = 0;";
+$sql = "SELECT * FROM tbl_customers WHERE active = 0;";
 $q= $db->query($sql);
 $clients = $q->fetchAll();
 
-$sql = "SELECT projectName,companyName,projectNR, customer.customerNR FROM projects INNER JOIN customer ON projects.customerNR = customer.customerNR WHERE projects.active = 0;";
+$sql = "SELECT projectName,companyName,projectNR, tbl_customers.customerNR FROM tbl_projects INNER JOIN tbl_customers ON tbl_projects.customerNR = tbl_customers.customerNR WHERE tbl_projects.active = 0;";
 $q= $db->query($sql);
 $prResults = $q->fetchAll();
 
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM tbl_users";
 $q= $db->query($sql);
 $users = $q->fetchAll();
+
+$sql = "SELECT tbl_customers.companyName, tbl_appointments.subject, tbl_appointments.appdate ,tbl_appointments.appointmentNR FROM tbl_appointments INNER JOIN tbl_customers ON tbl_appointments.customerNR = tbl_customers.customerNR WHERE tbl_appointments.active = 0";
+$q= $db->query($sql);
+$appointments = $q->fetchAll();
     
 ?>
 
@@ -143,7 +147,7 @@ $users = $q->fetchAll();
 
             <?php foreach ($prResults as $result): ?>
                 <tbody>
-                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/development/projectPage.php?projectnr=' .  $result['projectNR'] ?>'>
+                    <tr>
                         
                         <td><?php echo $result['projectName'] ?></td>
                         
@@ -161,7 +165,50 @@ $users = $q->fetchAll();
             <?php endforeach; ?>
         </table>
     </div>
+
+
+<div class="table">
     <div class="col-md-6">
+
+        <h2>Inactive appointments</h2>
+
+        <table class='table table-hover'>
+            <thead>
+                 <tr>
+                    <th>Company</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Reset</th>
+ 
+                </tr>
+            </thead>
+
+            <?php foreach ($appointments as $appointment): ?>
+                <tbody>
+                    <tr>
+
+                        <td><?php echo $appointment['companyName'] ?></td>
+
+                        <td><?php echo $appointment['subject'] ?></td>
+
+                        <td><?php echo $appointment['appdate'] ?></td>
+                        <td>
+                            <form action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
+                                <input type="hidden" name="type" value="reset">
+                                <input type="hidden" name='appointmentNR' value=<?php echo $appointment['appointmentNR'] ?>>
+                                <input style='margin-top: 0'class="btn btn-primary" type="submit" id="submit" value='Reset'>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            <?php endforeach; ?>
+        </table>
+
+    </div>
+
+
+
+    <div class="col-md-12">
     <h2>Users</h2>
         <table class="table table-hover">
             <thead>
@@ -203,7 +250,7 @@ $users = $q->fetchAll();
         </table>
     </div>
 
-
+    
 
         
     <div class="seperator"></div>

@@ -37,7 +37,7 @@ switch($_POST['type']){
 
 function remove($db, $id, $messageBag){
 
-    $sql = 'DELETE FROM invoices WHERE invoiceNR = :id';
+    $sql = 'DELETE FROM tbl_invoices WHERE invoiceNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -47,7 +47,7 @@ function remove($db, $id, $messageBag){
 
 
 function edit($id, $description, $inDate, $price,  $active, $db,$messageBag ) {
-    $sql = 'SELECT * FROM invoices where invoiceNR = :id';
+    $sql = 'SELECT * FROM tbl_invoices where invoiceNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -57,7 +57,7 @@ function edit($id, $description, $inDate, $price,  $active, $db,$messageBag ) {
 
     if ($q->rowCount() > 0) {
         
-    	$sql = 'UPDATE invoices 
+    	$sql = 'UPDATE tbl_invoices 
         SET description = :description, inDate = :inDate, price = :price, active = :active WHERE invoiceNR = :id';
 
         $q = $db->prepare($sql);
@@ -90,7 +90,7 @@ function add($projectNR, $description, $inDate, $price, $db,$messageBag ) {
         $messageBag->Add('a',"Description isn't filled in!");
         return false;
     } else {
-        $sql = 'SELECT * FROM invoices where description = :description and projectNR = :projectNR';
+        $sql = 'SELECT * FROM tbl_invoices where description = :description and projectNR = :projectNR';
         $q = $db->prepare($sql);
         $q->bindParam(':description', $description);
         $q->bindParam(':projectNR', $projectNR);
@@ -103,7 +103,7 @@ function add($projectNR, $description, $inDate, $price, $db,$messageBag ) {
 
         } else {
 
-            $sql = 'INSERT INTO invoices (projectNR, description, inDate, price, btw, active)  VALUES (:projectNR, :description, :inDate, :price, 1.12, 1)';
+            $sql = 'INSERT INTO tbl_invoices (projectNR, description, inDate, price, btw, active)  VALUES (:projectNR, :description, :inDate, :price, 1.21, 1)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':projectNR', $projectNR);
@@ -118,7 +118,7 @@ function add($projectNR, $description, $inDate, $price, $db,$messageBag ) {
 }
 
 function inReset($db,$id,$messageBag){
-    $sql = 'SELECT * FROM invoices where invoiceNR = :id';
+    $sql = 'SELECT * FROM tbl_invoices where invoiceNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -128,7 +128,7 @@ function inReset($db,$id,$messageBag){
 
     if ($q->rowCount() > 0) {
 
-        $sql = 'UPDATE invoices 
+        $sql = 'UPDATE tbl_invoices 
         SET active = 1
         WHERE invoiceNR = :id';
 

@@ -11,21 +11,21 @@ if ( !isset($_SESSION['user']) ) {
         header('location:' . HTTP . 'public/index.php');
     }
 
-$sql = "SELECT invoices.description, invoices.invoiceNR, invoices.inDate, customer.companyName  
-        FROM invoices 
-        INNER JOIN projects ON projects.projectNR = invoices.projectNR 
-        INNER JOIN customer ON customer.customerNR = projects.customerNR
-        WHERE invoices.active = 1";
+$sql = "SELECT tbl_invoices.description, tbl_invoices.invoiceNR, tbl_invoices.inDate, tbl_customers.companyName  
+        FROM tbl_invoices 
+        INNER JOIN tbl_projects ON tbl_projects.projectNR = tbl_invoices.projectNR 
+        INNER JOIN tbl_customers ON tbl_customers.customerNR = tbl_projects.customerNR
+        WHERE tbl_invoices.active = 1";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
-$sql = "SELECT customer.companyName, projects.projectName, projects.projectNR
-        FROM projects
-        INNER JOIN customer on customer.customerNR = projects.customerNR";
+$sql = "SELECT tbl_customers.companyName, tbl_projects.projectName, tbl_projects.projectNR
+        FROM tbl_projects
+        INNER JOIN tbl_customers on tbl_customers.customerNR = tbl_projects.customerNR";
 $q= $db->query($sql);
 $projects = $q->fetchAll();
 
-$sql = "SELECT * FROM customer WHERE active = 1;";
+$sql = "SELECT * FROM tbl_customers WHERE active = 1;";
     $q= $db->query($sql);
     $clients = $q->fetchAll();
 
@@ -67,6 +67,28 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
         }
     ?>
 <div class="container">
+    <div class="searchIcon">
+        <i class="fa fa-search"></i>
+    </div>
+    <div class="searchBar pull-right sClosed">
+        <form action="<?php echo HTTP . 'public/views/searchResults.php' ?>" method="post">
+            <input type="hidden" name='type' value="client">
+            <label for="term">Client name</label>
+            <input type="text" name="term" />
+            <input class="btn btn-primary pull-right" type="submit" id="submit" value="Search Client">
+        </form>
+        
+    </div>
+    <div class="searchBar pull-right sClosed">
+        <form action="<?php echo HTTP . 'public/views/searchResults.php' ?>" method="post">
+            <input type="hidden" name='type' value="invoice">
+            <label for="term">Invoice description</label>
+            <input type="text" name="term" />
+            <input class="btn btn-primary pull-right" type="submit" id="submit" value="Search Invoice">
+        </form>
+    </div>
+
+
     <?php if ($_SESSION['user']['userrole'] == 4): ?>
     <h1>Dashboard Finance</h1>
 <?php else: ?>
@@ -80,8 +102,8 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
 	            <thead>
 			      <tr>
 			     	<th>Client</th>
-			        <th>description</th>
-			        <th>date</th>
+			        <th>Description</th>
+			        <th>End date</th>
 			      </tr>
 			    </thead>
 
@@ -153,7 +175,7 @@ $sql = "SELECT * FROM customer WHERE active = 1;";
             </div>
             
             <div class=" col-md-2 form-group">
-                <label for="inDate">Date</label>
+                <label for="inDate">End date</label>
                 <input class="form-control" type="text" name='inDate'>
             </div>
 

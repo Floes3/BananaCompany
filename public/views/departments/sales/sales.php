@@ -11,11 +11,11 @@ if ( !isset($_SESSION['user']) ) {
         header('location:' . HTTP . 'public/index.php');
     }
 
-$sql = "SELECT appointmentNR, company, firstname, lastname, appdate, time, subject, location, attendingPeople, description, customer.customerNR FROM appointments INNER JOIN customer ON appointments.customerNR = customer.customerNR";
+$sql = "SELECT tbl_customers.companyName, tbl_appointments.subject, tbl_appointments.appdate ,tbl_appointments.appointmentNR FROM tbl_appointments INNER JOIN tbl_customers ON tbl_appointments.customerNR = tbl_customers.customerNR WHERE tbl_appointments.active = 1";
 $q= $db->query($sql);
 $results = $q->fetchAll();
 
-$sql = "SELECT * FROM customer WHERE active = 1;";
+$sql = "SELECT * FROM tbl_customers WHERE active = 1;";
 $q= $db->query($sql);
 $clients = $q->fetchAll();
 
@@ -57,6 +57,18 @@ $clients = $q->fetchAll();
     }
 ?>
 <div class="container">
+    <div class="searchIcon">
+        <i class="fa fa-search"></i>
+    </div>
+    <div class="searchBar pull-right sClosed">
+        <form action="<?php echo HTTP . 'public/views/searchResults.php' ?>" method="post">
+            <input type="hidden" name='type' value="client">
+            <label for="term">Client name</label>
+            <input type="text" name="term" />
+            <input class="btn btn-primary pull-right" type="submit" id="submit" value="Search Client">
+        </form>
+    </div>
+
 
 <div class="col-md-10 dash-title">
     <?php if ($_SESSION['user']['userrole'] == 4): ?>
@@ -76,20 +88,20 @@ $clients = $q->fetchAll();
                  <tr>
                     <th>Company</th>
                     <th>Subject</th>
-                    <th>appdate</th>
+                    <th>Date</th>
+ 
                 </tr>
             </thead>
 
             <?php foreach ($results as $result): ?>
                 <tbody>
-                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/sales/appointmentPage.php?appointmentnr=' .  $result['appointmentNR'] ?>'>
+                    <tr class='clickable-row' data-href='<?php echo HTTP . 'public/views/departments/sales/appointmentPage.php?appNR=' .  $result['appointmentNR'] ?>'>
 
-                        <td><?php echo $result['company'] ?></td>
+                        <td><?php echo $result['companyName'] ?></td>
 
                         <td><?php echo $result['subject'] ?></td>
 
                         <td><?php echo $result['appdate'] ?></td>
-
                     </tr>
                 </tbody>
             <?php endforeach; ?>
@@ -127,10 +139,11 @@ $clients = $q->fetchAll();
 <div class="addProject">
     <h2>Add Appointment</h2>
     <div class="col-md-12">
-        <form class="lineout" action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
+              
+           <form class="lineout" action="<?php echo HTTP . 'app/controllers/appointmentController.php' ?>" method='POST'>
             <input type="hidden" name="type" value="add">
             <div class=" col-md-3 form-group">
-                <label for="Company">Company</label>
+                <label for="customerNR">Client</label>
                 <select class="form-control" name="customerNR">
                     <?php foreach ($clients as $client): ?>
                         <option value="<?php echo $client['customerNR']?>" selected><?php echo $client['companyName'] ?></option>
@@ -138,48 +151,26 @@ $clients = $q->fetchAll();
                 </select>
             </div>
             <div class=" col-md-3 form-group">
-                <label for="appointmentNR">appointmentNR</label>
-                <input class="form-control" type="text" name='appointmentNR'>
-            </div>
+                <label for="subject">Subject</label>
+                <input class="form-control" type="text" name='subject'>
+            </div>             
             <div class=" col-md-3 form-group">
-                <label for="customerNR">customerNR</label>
-                <input class="form-control" type="text" name='customerNR'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="firstname">firstname</label>
-                <input class="form-control" type="text" name='firstname'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="lastname">lastname</label>
-                <input class="form-control" type="text" name='lastname'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="appdate">appdate</label>
+                <label for="appdate">Date</label>
                 <input class="form-control" type="text" name='appdate'>
             </div>
+                              
             <div class=" col-md-3 form-group">
-                <label for="time">time</label>
-                <input class="form-control" type="text" name='time'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="subject">subject</label>
-                <input class="form-control" type="text" name='subject'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="location">location</label>
-                <input class="form-control" type="text" name='location'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="attendingPeople">attendingPeople</label>
-                <input class="form-control" type="text" name='attendingPeople'>
-            </div>
-            <div class=" col-md-3 form-group">
-                <label for="description">description</label>
+                <label for="description">Description</label>
                 <input class="form-control" type="text" name='description'>
             </div>
-            <div class=" col-md-3 form-group ">
+            <div class=" col-md-3 form-group">
+                <label for="location">Location</label>
+                <input class="form-control" type="text" name='location'>
+            </div>
+            <div class=" col-md-9 form-group ">
                 <input class="btn btn-primary pull-right" type="submit" id="submit" value="Add appointment">
             </div>
+
         </form>
     </div>
 </div>

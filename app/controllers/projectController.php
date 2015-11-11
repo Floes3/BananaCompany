@@ -36,7 +36,7 @@ switch($_POST['type']){
 
 function remove($db, $id, $messageBag){
 
-    $sql = 'DELETE FROM projects WHERE projectNR = :id';
+    $sql = 'DELETE FROM tbl_projects WHERE projectNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -46,7 +46,7 @@ function remove($db, $id, $messageBag){
 
 
 function edit($projectName, $description, $active, $db, $id,$messageBag ) {
-    $sql = 'SELECT * FROM projects where projectNR = :id';
+    $sql = 'SELECT * FROM tbl_projects where projectNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -55,7 +55,7 @@ function edit($projectName, $description, $active, $db, $id,$messageBag ) {
 
 
     if ($q->rowCount() > 0) {
-    	$sql = 'UPDATE projects 
+    	$sql = 'UPDATE tbl_projects 
         SET projectName = :projectName, description = :description, active = :active WHERE projectNR = :id';
 
         $q = $db->prepare($sql);
@@ -87,7 +87,7 @@ function add($projectName, $customerNR, $description, $db,$messageBag ) {
         $messageBag->Add('a',"Project name isn't filled in!");
         return false;
     } else {
-        $sql = 'SELECT * FROM projects where projectName = :projectName';
+        $sql = 'SELECT * FROM tbl_projects where projectName = :projectName';
         $q = $db->prepare($sql);
         $q->bindParam(':projectName', $projectName);
         $q->execute();
@@ -99,7 +99,7 @@ function add($projectName, $customerNR, $description, $db,$messageBag ) {
 
         } else {
 
-            $sql = 'INSERT INTO projects (customerNR, projectName, description, active)  VALUES (:customerNR, :projectName, :description, 1)';
+            $sql = 'INSERT INTO tbl_projects (customerNR, projectName, description, active)  VALUES (:customerNR, :projectName, :description, 1)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':customerNR', $customerNR);
@@ -114,7 +114,7 @@ function add($projectName, $customerNR, $description, $db,$messageBag ) {
 }
 
 function prReset($db,$id,$messageBag){
-    $sql = 'SELECT * FROM projects where projectNR = :id';
+    $sql = 'SELECT * FROM tbl_projects where projectNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -124,7 +124,7 @@ function prReset($db,$id,$messageBag){
 
     if ($q->rowCount() > 0) {
 
-        $sql = 'UPDATE projects 
+        $sql = 'UPDATE tbl_projects 
         SET active = 1
         WHERE projectNR = :id';
          

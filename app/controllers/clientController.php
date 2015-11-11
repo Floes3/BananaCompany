@@ -38,7 +38,7 @@ switch($_POST['type']){
 
 function remove($db, $id, $messageBag){
 
-    $sql = "SELECT * FROM projects WHERE customerNR = :id";
+    $sql = "SELECT * FROM tbl_projects WHERE customerNR = :id";
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -49,7 +49,7 @@ function remove($db, $id, $messageBag){
     }   else {
 
 
-        $sql = 'DELETE FROM customer WHERE customerNR = :id';
+        $sql = 'DELETE FROM tbl_customers WHERE customerNR = :id';
         $q = $db->prepare($sql);
         $q->bindParam(':id', $id);
         $q->execute();
@@ -60,7 +60,7 @@ function remove($db, $id, $messageBag){
 
 
 function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $active, $db, $id,$messageBag ) {
-    $sql = 'SELECT * FROM customer where customerNR = :id';
+    $sql = 'SELECT * FROM tbl_customers where customerNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -69,9 +69,9 @@ function edit($clientName, $address, $zipcode, $place, $tel, $email, $contP, $ac
 
 
     if ($q->rowCount() > 0) {
+        
 
-
-    	$sql = 'UPDATE customer 
+    	$sql = 'UPDATE tbl_customers 
         SET companyName = :clientName, address = :address, zipCode = :zipcode, place = :place, tel = :tel, email = :email, contactPerson = :contP, active = :active WHERE customerNR = :id';
 
         $q = $db->prepare($sql);
@@ -108,7 +108,7 @@ function add($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db,
         $messageBag->Add('a',"Client name isn't filled in!");
         return false;
     } else {
-        $sql = 'SELECT * FROM customer where companyName = :clientName';
+        $sql = 'SELECT * FROM tbl_customers where companyName = :clientName';
         $q = $db->prepare($sql);
         $q->bindParam(':clientName', $clientName);
         $q->execute();
@@ -120,7 +120,7 @@ function add($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db,
 
         } else {
 
-            $sql = 'INSERT INTO customer (companyName, address, zipCode, place, tel, email, contactPerson, active)  VALUES (:clientName, :address, :zipcode, :place, :tel, :email, :contP, 1)';
+            $sql = 'INSERT INTO tbl_customers (companyName, address, zipCode, place, tel, email, contactPerson, active)  VALUES (:clientName, :address, :zipcode, :place, :tel, :email, :contP, 1)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':clientName', $clientName);
@@ -139,7 +139,7 @@ function add($clientName, $address, $zipcode, $place, $tel, $email, $contP, $db,
 }
 
 function clientReset($db,$id,$messageBag){
-    $sql = 'SELECT * FROM customer where customerNR = :id';
+    $sql = 'SELECT * FROM tbl_customers where customerNR = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();
@@ -149,7 +149,7 @@ function clientReset($db,$id,$messageBag){
 
     if ($q->rowCount() > 0) {
 
-        $sql = 'UPDATE customer 
+        $sql = 'UPDATE tbl_customers 
         SET active = 1
         WHERE customerNR = :id';
 

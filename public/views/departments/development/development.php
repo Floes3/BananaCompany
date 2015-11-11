@@ -10,11 +10,11 @@
     }
 
 
-    $sql = "SELECT projectName,companyName,projectNR, customer.customerNR FROM projects INNER JOIN customer ON projects.customerNR = customer.customerNR WHERE projects.active = 1;";
+    $sql = "SELECT projectName,companyName,projectNR, tbl_customers.customerNR FROM tbl_projects INNER JOIN tbl_customers ON tbl_projects.customerNR = tbl_customers.customerNR WHERE tbl_projects.active = 1;";
     $q= $db->query($sql);
     $results = $q->fetchAll();
 
-    $sql = "SELECT * FROM customer WHERE active = 1;";
+    $sql = "SELECT * FROM tbl_customers WHERE active = 1;";
     $q= $db->query($sql);
     $clients = $q->fetchAll();
 ?>
@@ -55,6 +55,27 @@
     }
 ?>
 <div class="container">
+
+    <div class="searchIcon">
+        <i class="fa fa-search"></i>
+    </div>
+    <div class="searchBar pull-right sClosed">
+        <form action="<?php echo HTTP . 'public/views/searchResults.php' ?>" method="post">
+            <input type="hidden" name='type' value="client">
+            <label for="term">Client name</label>
+            <input type="text" name="term" />
+            <input class="btn btn-primary pull-right" type="submit" id="submit" value="Search Client">
+        </form>
+        
+    </div>
+    <div class="searchBar pull-right sClosed">
+        <form action="<?php echo HTTP . 'public/views/searchResults.php' ?>" method="post">
+            <input type="hidden" name='type' value="project">
+            <label for="term">Project name</label>
+            <input type="text" name="term" />
+            <input class="btn btn-primary pull-right" type="submit" id="submit" value="Search Project">
+        </form>
+    </div>
 
 <div class="col-md-10 dash-title">
 <?php if ($_SESSION['user']['userrole'] == 4): ?>

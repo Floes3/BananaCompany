@@ -10,11 +10,11 @@
     }
 
     $invoiceNR = $_GET['innr'];
-    $sql = "SELECT invoices.description, invoices.invoiceNR, inDate, price, btw, companyName 
-        FROM invoices 
-        INNER JOIN projects ON projects.projectNR = invoices.projectNR 
-        INNER JOIN customer ON customer.customerNR = projects.customerNR
-        WHERE invoices.active = 1 and invoiceNR = $invoiceNR";
+    $sql = "SELECT tbl_invoices.description, tbl_invoices.invoiceNR, inDate, price, btw, companyName, tbl_projects.projectName 
+        FROM tbl_invoices 
+        INNER JOIN tbl_projects ON tbl_projects.projectNR = tbl_invoices.projectNR 
+        INNER JOIN tbl_customers ON tbl_customers.customerNR = tbl_projects.customerNR
+        WHERE tbl_invoices.active = 1 and invoiceNR = $invoiceNR";
 
     $q= $db->query($sql);
     $results = $q->fetchAll();
@@ -68,6 +68,7 @@
                 <thead>
                      <tr>
                         <th>Client name</th>
+                        <th>Project name</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Price</th>
@@ -83,6 +84,7 @@
                     <tr>
                         
                         <td><?php echo $result['companyName'] ?></td>
+                        <td><?php echo $result['projectName'] ?></td>
                         <td><?php echo $result['description'] ?></td>
                         <td><?php echo $result['inDate'] ?></td>
                         <td><?php echo $result['price'] ?></td>

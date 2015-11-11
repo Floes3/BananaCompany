@@ -48,7 +48,7 @@ function login($db, $username, $password,$messageBag){
         return false;
     }
 
-    $sql = "SELECT * FROM users WHERE name = :username";
+    $sql = "SELECT * FROM tbl_users WHERE name = :username";
     $q = $db->prepare($sql);
     $q->bindparam(':username', $username);
     $q->execute();
@@ -85,7 +85,7 @@ function register($db,$username,$password, $userrole,$messageBag){
         return false;
     } else {
 
-        $sql = 'SELECT * FROM users where name = :username';
+        $sql = 'SELECT * FROM tbl_users where name = :username';
         $q = $db->prepare($sql);
         $q->bindParam(':username', $username);
         $q->execute();
@@ -97,7 +97,7 @@ function register($db,$username,$password, $userrole,$messageBag){
         } else {
             $hashed = password_hash($password,PASSWORD_DEFAULT);
 
-            $sql = 'INSERT INTO users (name, password, userrole)  VALUES (:username,:hashed, :userrole)';
+            $sql = 'INSERT INTO tbl_users (name, password, userrole)  VALUES (:username,:hashed, :userrole)';
 
             $q = $db->prepare($sql);
             $q->bindParam(':username', $username);
@@ -111,7 +111,7 @@ function register($db,$username,$password, $userrole,$messageBag){
 }
 
 function delete($id,$db,$messageBag){
-    $sql = 'DELETE FROM users WHERE id = :id';
+    $sql = 'DELETE FROM tbl_users WHERE id = :id';
     $q = $db->prepare($sql);
     $q->bindParam(':id', $id);
     $q->execute();

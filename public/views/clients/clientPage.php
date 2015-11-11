@@ -7,7 +7,7 @@
     }
 
     $clientNR = $_GET['clientnr'];
-    $sql = "SELECT * FROM customer WHERE customerNR = $clientNR;";
+    $sql = "SELECT * FROM tbl_customers WHERE customerNR = $clientNR;";
 
     $q= $db->query($sql);
     $results = $q->fetchAll();
